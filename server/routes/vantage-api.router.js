@@ -1,0 +1,108 @@
+const router = require('express').Router();
+const axios = require('axios');
+
+router.post('/getExchangeRate', async (req, res) => {
+  const currencyFrom = req.body.currencyFrom;
+  const currencyTo = req.body.currencyTo;
+
+  const apiRes = await axios.get('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=' + currencyFrom + '&to_currency=' + currencyTo + '&apikey=' + process.env.KEY)
+    .then(res => {
+      return res
+    });
+  console.log(apiRes.data['Error Message']);
+  if (apiRes.data.Note) {
+    return res.status(429).json({
+      Error: "Too many requests, slow down (one search a minute)"
+    });
+  }
+  if (apiRes.data["Error Message"]) {
+    console.log("reach into invalid")
+    return res.status(422).json({
+      Error: "Invalid ISO currency code"
+    });
+  }
+  return res.json(apiRes.data);
+});
+
+router.post('/getCryptoRating', async (req, res) => {
+  const currencyName = req.body.currencyName;
+  const apiRes = await axios.get('https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=' + currencyName + '&apikey=' + process.env.KEY)
+    .then(res => {
+      return res
+    });
+  if (apiRes.data.Note) {
+    return res.status(429).json({
+      Error: "Too many requests, slow down (one search a minute)"
+    });
+  }
+  if (apiRes.data["Error Message"]) {
+    return res.status(422).json({
+      Error: "Invalid ISO currency code"
+    });
+  }
+  return res.json(apiRes.data);
+});
+
+router.post('/getHistory', async (req, res) => {
+  const choice = req.body.choice;
+  const currencyFrom = req.body.currencyFrom;
+  const currencyTo = req.body.currencyTo;
+  //https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=CAD&apiley=
+  const apiRes = await axios.get('https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_' + choice + '&symbol=' + currencyFrom + '&market=' + currencyTo + '&apikey=' + process.env.KEY)
+    .then(res => {
+      return res
+    });
+  if (apiRes.data.Note) {
+    return res.status(429).json({
+      Error: "Too many requests, slow down (one search a minute)"
+    });
+  }
+  if (apiRes.data["Error Message"]) {
+    return res.status(422).json({
+      Error: "Invalid ISO currency code"
+    });
+  }
+  return res.json(apiRes.data);
+});
+
+router.post('/getSymbolHistory', async (req, res) => {
+  const symbol = req.body.symbol;
+  //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo
+  const apiRes = await axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=' + symbol + '&apikey=' + process.env.KEY)
+    .then(res => {
+      return res
+    });
+  if (apiRes.data.Note) {
+    return res.status(429).json({
+      Error: "Too many requests, slow down (one search a minute)"
+    });
+  }
+  if (apiRes.data["Error Message"]) {
+    return res.status(422).json({
+      Error: "Invalid Symbol code"
+    });
+  }
+  return res.json(apiRes.data);
+});
+
+router.post('/getSymbolOverview', async (req, res) => {
+  const symbol = req.body.symbol;
+  //https://www.alphavantage.co/query?function=OVERVIEW&symbol=AAPL&apikey=
+  const apiRes = await axios.get('https://www.alphavantage.co/query?function=OVERVIEW&symbol=' + symbol + '&apikey=' + process.env.KEY)
+    .then(res => {
+      return res
+    });
+  if (apiRes.data.Note) {
+    return res.status(429).json({
+      Error: "Too many requests, slow down (one search a minute)"
+    });
+  }
+  if (apiRes.data["Error Message"]) {
+    return res.status(422).json({
+      Error: "Invalid Symbol code"
+    });
+  }
+  return res.json(apiRes.data);
+});
+
+module.exports = router;

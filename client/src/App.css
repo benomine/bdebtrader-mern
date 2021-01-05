@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+}
+
+.container-fluid {
+  padding: 0;
+  text-align: center;
+}
+
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.section-1-img {
+  margin-top: 5.5rem;
+  width: 50rem;
+}
+
+.text-container {
+  text-align: right;
+  margin-top: 9rem;
+}
+
+#Header {
+  color: #173A50;
+  font-size: 75px;
+  font-weight: bold;
+}
+
+#Sub-Header {
+  color: #647B8A;
+  font-size: 50px;
+  font-weight: bold;
+
+}
+
+@media(max-width:768px) {
+  .section-1-img {
+    margin-top: 1rem;
+
+    width: 30rem;
+  }
+
+  .text-container {
+    text-align: left;
+    margin-top: 1rem
+  }
+}
+
+@media(max-width:1280px) {
+  .text-container {
+
+    margin-top: 1rem
+  }
+}

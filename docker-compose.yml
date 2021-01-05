@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "2000:27017"
+    volumes:
+      - ./mongo:/data/db
+    networks:
+      - mern_stack
+    restart: always
+  express:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: express
+    env_file: ./server/.env
+    depends_on:
+      - mongo
+    ports:
+      - "3001:3001"
+    networks:
+      - mern_stack
+    volumes:
+      - /usr/app/node_modules
+    links:
+      - mongo
+  react:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: react
+    depends_on:
+      - express
+    ports:
+      - "3000:3000"
+    networks:
+      - mern_stack
+    volumes:
+      - /usr/src/app/node_modules
+    links:
+      - express
+      - mongo
+    stdin_open: true
+    tty: true
+networks:
+  mern_stack:
+    driver: bridge
