@@ -8,6 +8,8 @@ Dockerfile + docker-compose.yml qui permet de créer le stack
 
 Utilisation : docker-compose up --build
 
+Se connecter ensuite sur : http://localhost:3000/
+
 ## Screenshots
 ![Screenshot 1](./screenshots/capture%201.png)
 ![Screenshot 2](./screenshots/capture%202.png)
